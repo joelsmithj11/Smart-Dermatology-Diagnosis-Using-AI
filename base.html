@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Dermatology Diagnosis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Optional Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('main.index') }}" class="logo">
+            <img src="{{ url_for('static', filename='assets/hospital_logo.png') }}?v={{ range(1, 10000) | random }}"
+                alt="Logo" style="height: 40px; width: auto;">
+            Smart Dermatology Diagnosis using AI
+        </a>
+        <div class="nav-links">
+            {% if current_user.is_authenticated %}
+            {% if current_user.role == 'admin' %}
+            <!-- Admin Nav: Home (Dashboard) only -->
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link"><i class="fa-solid fa-shield-halved"></i></a>
+
+            {% if request.endpoint != 'main.index' %}
+            <div class="nav-link" style="color: var(--secondary); font-weight: 700;">
+                <i class="fa-solid fa-user-shield"></i> {{ current_user.username }}
+            </div>
+            {% else %}
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link" style="font-weight: 600;">{{
+                get_text('nav_go_dashboard') }}</a>
+            {% endif %}
+
+            {% else %}
+
+            <!-- Customer Nav: Home (Dashboard) only -->
+            <a href="{{ url_for('main.home') }}" class="nav-link"><i class="fa-solid fa-house"></i></a>
+
+            {% if request.endpoint != 'main.index' %}
+            <div class="nav-link" style="color: var(--primary); font-weight: 700;">
+                <i class="fa-solid fa-user-circle"></i> {{ current_user.username }}
+            </div>
+            {% else %}
+            <a href="{{ url_for('main.home') }}" class="nav-link" style="font-weight: 600;">{{
+                get_text('nav_go_dashboard') }}</a>
+            {% endif %}
+
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="nav-link text-danger"><i
+                    class="fa-solid fa-right-from-bracket"></i> {{ get_text('nav_logout') }}</a>
+
+            <!-- Language Switcher -->
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem; align-items: center;">
+                <a href="{{ url_for('main.set_language', lang='en') }}"
+                    style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); {{ 'color:var(--primary);' if session.get('lang') != 'ta' else '' }}">EN</a>
+                <span style="color: var(--border-light);">|</span>
+                <a href="{{ url_for('main.set_language', lang='ta') }}"
+                    style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); {{ 'color:var(--primary);' if session.get('lang') == 'ta' else '' }}">தமிழ்</a>
+            </div>
+
+            {% else %}
+            <!-- Guest Nav -->
+            <a href="{{ url_for('main.index') }}" class="nav-link">{{ get_text('nav_home') }}</a>
+            <a href="{{ url_for('auth.login_selection') }}" class="nav-link">{{ get_text('nav_login') }}</a>
+
+            <!-- Language Switcher (Guest) -->
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem; align-items: center;">
+                <a href="{{ url_for('main.set_language', lang='en') }}"
+                    style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); {{ 'color:var(--primary);' if session.get('lang') != 'ta' else '' }}">EN</a>
+                <span style="color: var(--border-light);">|</span>
+                <a href="{{ url_for('main.set_language', lang='ta') }}"
+                    style="font-size: 0.9rem; font-weight: 700; color: var(--text-secondary); {{ 'color:var(--primary);' if session.get('lang') == 'ta' else '' }}">தமிழ்</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-error">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>

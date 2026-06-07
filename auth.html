@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card" style="border-top: 4px solid var(--primary);">
+    <div class="text-center mb-4">
+        <div
+            style="width: 60px; height: 60px; background: rgba(249, 115, 22, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--primary);">
+            <i class="fa-solid fa-user-injured" style="font-size: 1.5rem;"></i>
+        </div>
+        <h2>Patient Access</h2>
+        <p class="text-gray" style="font-size: 0.9rem;">Secure login for diagnosis history</p>
+    </div>
+
+    <!-- Toggle Controls -->
+    <div class="auth-toggle-container"
+        style="background: rgba(0,0,0,0.2); padding: 4px; border-radius: 12px; display: flex; margin-bottom: 2rem;">
+        <button onclick="showLogin()" class="btn-toggle active" id="loginBtn"
+            style="flex: 1; border: none; background: var(--bg-dark); color: white; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 0.9rem;">Sign
+            In</button>
+        <button onclick="showRegister()" class="btn-toggle" id="regBtn"
+            style="flex: 1; border: none; background: transparent; color: var(--text-gray); padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 0.9rem;">Register</button>
+    </div>
+
+    <div id="loginForm">
+        <form action="{{ url_for('auth.login') }}" method="POST">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-user"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="text" name="username" class="form-control" style="padding-left: 2.5rem;"
+                        placeholder="Enter your username" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="password" name="password" class="form-control" style="padding-left: 2.5rem;"
+                        placeholder="Enter your password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">CAPTCHA</label>
+                <div
+                    style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: center;">
+                    <img src="{{ url_for('auth.captcha') }}" id="captchaImg"
+                        style="border-radius: 4px; cursor: pointer;"
+                        onclick="document.getElementById('captchaImg').src='{{ url_for('auth.captcha') }}?' + new Date().getTime();"
+                        title="Click to refresh">
+                </div>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-shield-cat"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="text" name="captcha" class="form-control"
+                        style="padding-left: 2.5rem; text-transform: uppercase;" placeholder="Enter code above" required
+                        autocomplete="off">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"
+                style="width: 100%; justify-content: center; padding: 0.8rem;">
+                Access Portal <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <div id="registerForm" style="display: none;">
+        <form action="{{ url_for('auth.register') }}" method="POST">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-user"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="text" name="username" class="form-control" style="padding-left: 2.5rem;"
+                        placeholder="Choose a username" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-envelope"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="email" name="email" class="form-control" style="padding-left: 2.5rem;"
+                        placeholder="Enter your email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div style="position: relative;">
+                    <i class="fa-solid fa-lock"
+                        style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="password" name="password" class="form-control" style="padding-left: 2.5rem;"
+                        placeholder="Create a password" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"
+                style="width: 100%; justify-content: center; padding: 0.8rem;">
+                Create Account <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </form>
+    </div>
+</div>
+</div>
+
+<script>
+    function showLogin() {
+        document.getElementById('loginForm').style.display = 'block';
+        document.getElementById('registerForm').style.display = 'none';
+
+        const loginBtn = document.getElementById('loginBtn');
+        const regBtn = document.getElementById('regBtn');
+
+        loginBtn.style.background = 'var(--bg-dark)';
+        loginBtn.style.color = 'white';
+
+        regBtn.style.background = 'transparent';
+        regBtn.style.color = 'var(--text-gray)';
+    }
+    function showRegister() {
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+
+        const loginBtn = document.getElementById('loginBtn');
+        const regBtn = document.getElementById('regBtn');
+
+        regBtn.style.background = 'var(--bg-dark)';
+        regBtn.style.color = 'white';
+
+        loginBtn.style.background = 'transparent';
+        loginBtn.style.color = 'var(--text-gray)';
+    }
+</script>
+{% endblock %}

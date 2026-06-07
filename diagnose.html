@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <h2 class="mb-4"><i class="fa-solid fa-microscope"></i> AI Skin Diagnosis</h2>
+
+    <form action="{{ url_for('main.diagnose') }}" method="POST" enctype="multipart/form-data">
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--primary);"></i>
+            <h3 class="mt-4">Click to Upload Image</h3>
+            <p class="text-gray">Supported formats: JPG, PNG, JPEG</p>
+            <input type="file" id="fileInput" name="file" accept="image/*" style="display: none"
+                onchange="previewImage(this)">
+        </div>
+
+        <div id="preview-container" class="text-center mt-4" style="display: none;">
+            <img id="preview" src="#" alt="Preview" style="max-width: 300px; border-radius: 8px;">
+            <br>
+            <button type="submit" class="btn btn-primary mt-4">Analyze Image</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}

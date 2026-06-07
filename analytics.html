@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Analytics - Smart Dermatology Diagnosis{% endblock %}
+
+{% block content %}
+<style>
+    .analytics-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .filter-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .filter-control {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .filter-control label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #334155;
+    }
+
+    .filter-control input,
+    .filter-control select {
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .stat-card h3 {
+        font-size: 2rem;
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .stat-card p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+    }
+
+    .results-table {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .results-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .results-table th {
+        background: #f1f5f9;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #475569;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .results-table td {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .results-table tr:hover {
+        background: #f8fafc;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #cbd5e1;
+        color: #475569;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<div class="analytics-container">
+    <h1 style="margin-bottom: 2rem;">📊 Admin Analytics Dashboard</h1>
+
+    <!-- Filter Card -->
+    <div class="filter-card">
+        <h3 style="margin-top: 0;">Filters</h3>
+        <form method="GET" action="{{ url_for('admin.analytics') }}">
+            <div class="filter-grid">
+                <div class="filter-control">
+                    <label>Date From</label>
+                    <input type="date" name="date_from" value="{{ filters.date_from }}">
+                </div>
+
+                <div class="filter-control">
+                    <label>Date To</label>
+                    <input type="date" name="date_to" value="{{ filters.date_to }}">
+                </div>
+
+                <div class="filter-control">
+                    <label>Year</label>
+                    <select name="year">
+                        <option value="">All Years</option>
+                        {% for year in years %}
+                        <option value="{{ year }}" {% if filters.year==year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-control">
+                    <label>Country</label>
+                    <select name="country">
+                        <option value="">All Countries</option>
+                        {% for country in countries %}
+                        <option value="{{ country }}" {% if filters.country==country %}selected{% endif %}>{{ country }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-control">
+                    <label>State</label>
+                    <select name="state">
+                        <option value="">All States</option>
+                        {% for state in states %}
+                        <option value="{{ state }}" {% if filters.state==state %}selected{% endif %}>{{ state }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-control">
+                    <label>Disease</label>
+                    <select name="disease">
+                        <option value="">All Diseases</option>
+                        {% for disease in diseases %}
+                        <option value="{{ disease }}" {% if filters.disease==disease %}selected{% endif %}>{{ disease }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="{{ url_for('admin.analytics') }}" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>{{ total_filtered }}</h3>
+            <p>Total Results</p>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="results-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Patient</th>
+                    <th>Gender</th>
+                    <th>Location</th>
+                    <th>Disease</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if predictions %}
+                {% for pred in predictions %}
+                <tr>
+                    <td>{{ pred[5][:10] if pred[5] else 'N/A' }}</td>
+                    <td>{{ pred[7] or pred[1] }}</td>
+                    <td>{{ pred[8] or 'N/A' }}</td>
+                    <td>{{ pred[9] }}, {{ pred[10] }}, {{ pred[11] }}</td>
+                    <td><strong>{{ pred[2] }}</strong></td>
+                    <td>{{ "%.1f"|format(pred[3]) }}%</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                        No predictions found matching the selected filters.
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

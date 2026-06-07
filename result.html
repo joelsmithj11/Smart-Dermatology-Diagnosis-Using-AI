@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="grid-2">
+        <div>
+            <h2>Diagnosis Results</h2>
+            <div class="mt-4">
+                <h4 class="text-gray">Detection</h4>
+                <h1 style="color: var(--primary); text-transform: capitalize;">{{ disease }}</h1>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="text-gray">Confidence</h4>
+                <h2>{{ confidence | round(2) }}%</h2>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="text-gray">Severity Assessment</h4>
+                {% if severity == 'High Risk' or severity == 'High Confidence' %}
+                <h3 class="text-danger">{{ severity }}</h3>
+                {% elif severity == 'Moderate Risk' %}
+                <h3 style="color: orange">{{ severity }}</h3>
+                {% elif severity == 'Uncertain' or severity == 'Low Confidence Match' %}
+                <h3 class="text-secondary">{{ severity }}</h3>
+                {% else %}
+                <h3 class="text-success">{{ severity }}</h3>
+                {% endif %}
+            </div>
+
+            <div class="mt-4">
+                <h4 class="text-gray">Description</h4>
+                <p>{{ desc }}</p>
+            </div>
+
+            {% if severity == 'Uncertain' %}
+            <div class="mt-4 alert"
+                style="background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
+                    <i class="fa-solid fa-circle-question"></i> Recommendation
+                </div>
+                <p style="margin: 0; color: inherit;">{{ first_aid }}</p>
+            </div>
+            {% else %}
+            <div class="mt-4 alert alert-success" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
+                    <i class="fa-solid fa-notes-medical"></i> Immediate Action
+                </div>
+                <p style="margin: 0; color: inherit;">{{ first_aid }}</p>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <form action="{{ url_for('main.generate_pdf_route') }}" method="POST">
+                    <input type="hidden" name="disease" value="{{ disease }}">
+                    <input type="hidden" name="confidence" value="{{ confidence }}">
+                    <input type="hidden" name="severity" value="{{ severity }}">
+                    <input type="hidden" name="original_img" value="{{ original_img }}">
+                    <input type="hidden" name="gradcam_img" value="{{ gradcam_img }}">
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-file-pdf"></i> Download
+                        Report</button>
+                    <a href="{{ url_for('main.diagnose') }}" class="btn btn-secondary">Analyze Another</a>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <h3>Visual Analysis</h3>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <div style="flex: 1;">
+                    <p class="text-center mb-2">Original</p>
+                    <img src="{{ url_for('static', filename='uploads/' + original_img) }}"
+                        style="width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 1/1;">
+                </div>
+                <div style="flex: 1;">
+                    <p class="text-center mb-2">AI Attention</p>
+                    <img src="{{ url_for('static', filename='uploads/' + gradcam_img) }}"
+                        style="width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 1/1;">
+                </div>
+            </div>
+            <div class="mt-4 alert alert-error">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <strong>Disclaimer:</strong> This result is AI-generated and not a medical diagnosis. Please consult a
+                dermatologist.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

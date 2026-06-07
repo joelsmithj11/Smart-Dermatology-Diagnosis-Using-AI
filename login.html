@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="glass-card" style="border-top: 4px solid var(--secondary);">
+        <div class="text-center mb-4">
+            <div
+                style="width: 60px; height: 60px; background: rgba(225, 29, 72, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--secondary);">
+                <i class="fa-solid fa-user-shield" style="font-size: 1.5rem;"></i>
+            </div>
+            <h2>Admin Portal</h2>
+            <p class="text-gray" style="font-size: 0.9rem;">Restricted access for medical staff only</p>
+        </div>
+
+        <div id="loginForm">
+            <form action="{{ url_for('auth.admin_login') }}" method="POST">
+                <div class="form-group">
+                    <label class="form-label">Admin Username</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-id-badge"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="text" name="username" class="form-control"
+                            style="padding-left: 2.5rem; background: rgba(0,0,0,0.3);" placeholder="Enter admin ID"
+                            required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Secure Password</label>
+                    <div style="position: relative;">
+                        <i class="fa-solid fa-key"
+                            style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        <input type="password" name="password" class="form-control"
+                            style="padding-left: 2.5rem; background: rgba(0,0,0,0.3);" placeholder="Enter password"
+                            required>
+                    </div>
+                </div>
+                <button type="submit" class="btn"
+                    style="width: 100%; justify-content: center; padding: 0.8rem; background: var(--secondary); color: white; border: none; font-weight: 600;">
+                    <i class="fa-solid fa-lock"></i> Authorize Access
+                </button>
+            </form>
+            <div class="mt-4 text-center">
+                <a href="{{ url_for('auth.login') }}"
+                    style="font-size: 0.9rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-arrow-left"></i> Return to Patient Portal
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .hero-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 5rem 1rem 3rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--primary);
+        background: rgba(14, 165, 233, 0.1);
+        padding: 0.5rem 1rem;
+        border-radius: 9999px;
+        margin-bottom: 1.5rem;
+        display: inline-block;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--text-main) 0%, var(--text-secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.6;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+        width: 100%;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-light);
+        transition: all 0.2s ease;
+        text-align: left;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary);
+    }
+
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+</style>
+
+<div class="hero-section">
+    <div class="hero-eyebrow">{{ get_text('hero_eyebrow') }}</div>
+    <h1 class="hero-title">{{ get_text('hero_title') }}</h1>
+    <p class="hero-subtitle">
+        {{ get_text('hero_subtitle') }}
+    </p>
+
+    <div class="cta-group">
+        <a href="{{ url_for('auth.login_selection') }}" class="btn btn-primary"
+            style="padding: 1rem 2.5rem; font-size: 1.1rem;">
+            {{ get_text('btn_get_started') }} <i class="fa-solid fa-arrow-right" style="margin-left: 0.5rem;"></i>
+        </a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #ecfdf5; color: #059669;">
+                <i class="fa-solid fa-microscope"></i>
+            </div>
+            <h4>{{ get_text('feature_instant') }}</h4>
+            <p style="font-size: 0.95rem; margin-bottom: 0;">{{ get_text('feature_instant_desc') }}</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #f0f9ff; color: #0ea5e9;">
+                <i class="fa-solid fa-file-medical-alt"></i>
+            </div>
+            <h4>{{ get_text('feature_reports') }}</h4>
+            <p style="font-size: 0.95rem; margin-bottom: 0;">{{ get_text('feature_reports_desc') }}</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon" style="background: #fff7ed; color: #ea580c;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h4>{{ get_text('feature_secure') }}</h4>
+            <p style="font-size: 0.95rem; margin-bottom: 0;">{{ get_text('feature_secure_desc') }}</p>
+        </div>
+    </div>
+
+    <div style="margin-top: 4rem; color: var(--text-tertiary); font-size: 0.875rem;">
+        {{ get_text('link_new_user') }} <a href="{{ url_for('auth.login_selection') }}"
+            style="color: var(--primary); font-weight: 600;">{{ get_text('link_create_account') }}</a>
+    </div>
+</div>
+{% endblock %}

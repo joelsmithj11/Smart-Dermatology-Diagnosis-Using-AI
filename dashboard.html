@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <h2><i class="fa-solid fa-shield-halved"></i> Admin Dashboard</h2>
+
+    <!-- Search Bar -->
+    <form action="{{ url_for('admin.dashboard') }}" method="GET" class="mb-4 mt-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search Patient Name..."
+                value="{{ search_query }}">
+            <button class="btn btn-primary" type="submit">Search</button>
+            {% if search_query %}
+            <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Clear</a>
+            {% endif %}
+        </div>
+    </form>
+
+    {% if search_results is not none %}
+    <h3 class="mt-4">Search Results for "{{ search_query }}"</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Patient Name</th>
+                    <th>Disease</th>
+                    <th>Confidence</th>
+                    <th>Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if search_results %}
+                {% for row in search_results %}
+                <tr>
+                    <td>{{ row[4] }}</td> <!-- Timestamp -->
+                    <td>{{ row[6] }}</td> <!-- Patient Name joined -->
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] | round(1) }}%</td>
+                    <td>{{ row[7] }}</td> <!-- Gender -->
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No records found matching "{{ search_query }}"</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Overview Statistics -->
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="glass-card text-center mb-3">
+                <h3>Total Users</h3>
+                <h1 class="display-4 text-primary">{{ total_users }}</h1>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card text-center mb-3">
+                <h3>Total Predictions</h3>
+                <h1 class="display-4 text-primary">{{ total_predictions }}</h1>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card text-center mb-3">
+                <h3>Unique Diseases</h3>
+                <h1 class="display-4 text-primary">{{ total_diseases }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Disease Breakdown -->
+        <div class="col-md-6">
+            <div class="glass-card mb-3">
+                <h4><i class="fa-solid fa-chart-pie"></i> Disease Statistics</h4>
+                <div style="max-height: 250px; overflow-y: auto;">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Disease</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in disease_stats %}
+                            <tr>
+                                <td>{{ d[0] }}</td>
+                                <td><span class="badge bg-info">{{ d[1] }}</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gender Breakdown -->
+        <div class="col-md-6">
+            <div class="glass-card mb-3">
+                <h4><i class="fa-solid fa-venus-mars"></i> Gender Distribution</h4>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Gender</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if gender_stats %}
+                        {% for g in gender_stats %}
+                        <tr>
+                            <td>{{ g[0] if g[0] else 'Not Specified' }}</td>
+                            <td><span class="badge bg-secondary">{{ g[1] }}</span></td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="2">No data available</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Logins Enhanced -->
+    <h3 class="mt-4">Recent Logins</h3>
+    <div class="table-responsive">
+        <table class="table mt-2">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Patient Name</th>
+                    <th>Login Time</th>
+                    <th>Latest Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in recent_logins %}
+                <tr>
+                    <td>{{ log[0] }}</td>
+                    <td>{{ log[2] if log[2] else '-' }}</td>
+                    <td>{{ log[1] }}</td>
+                    <td>
+                        {% if log[3] %}
+                        <span class="badge bg-success">{{ log[3] }}</span>
+                        {% else %}
+                        <span class="text-muted">None</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Collapsible Sections -->
+    <details class="mt-4">
+        <summary class="h5 text-primary" style="cursor: pointer;">View All Users & Diagnosis History</summary>
+
+        <!-- ALL USERS SECTION -->
+        <h4 class="mt-3">Registered Users</h4>
+        <div style="max-height: 300px; overflow-y: auto;">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in all_users %}
+                    <tr>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[6] if user[6] else user[2] }}</td>
+                        <td>{{ user[4] }}</td>
+                        <td>{{ 'Verified' if user[5] else 'Pending' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ALL DIAGNOSES SECTION -->
+        <h4 class="mt-3">Full Diagnosis Log</h4>
+        <div style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Disease</th>
+                        <th>Conf</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in recent_predictions %}
+                    <tr>
+                        <td>{{ log[0] }}</td>
+                        <td>{{ log[1] }}</td>
+                        <td>{{ log[2] }}</td>
+                        <td>{{ log[3] | round(0) }}%</td>
+                        <td>{{ log[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </details>
+
+</div>
+{% endblock %}

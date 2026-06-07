@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <div class="text-center" style="padding: 3rem 0;">
+        <img src="{{ url_for('static', filename='assets/hospital_logo.png') }}" alt="Logo"
+            style="width: 100px; margin-bottom: 2rem;">
+        <h1>Welcome back, {{ current_user.username }}</h1>
+        <p class="text-gray mb-4">Select an action to proceed</p>
+
+        <div class="grid-3 mt-4">
+            <a href="{{ url_for('main.diagnose') }}" class="glass-card text-center" style="display: block;">
+                <i class="fa-solid fa-microscope"
+                    style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h3>Diagnose</h3>
+                <p class="text-gray">Upload image for analysis</p>
+            </a>
+            <a href="{{ url_for('main.history') }}" class="glass-card text-center" style="display: block;">
+                <i class="fa-solid fa-clock-rotate-left"
+                    style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h3>History</h3>
+                <p class="text-gray">View past records</p>
+            </a>
+            <!-- Profile Card Removed -->
+        </div>
+    </div>
+</div>
+{% endblock %}

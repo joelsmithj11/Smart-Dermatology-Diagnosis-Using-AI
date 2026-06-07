@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="glass-card">
+    <h2><i class="fa-solid fa-clock-rotate-left"></i> My Diagnosis History</h2>
+
+    {% if history %}
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Disease</th>
+                <th>Confidence</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in history %}
+            <tr>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] | round(2) }}%</td>
+                <td>
+                    {% if row[5] and row[6] %}
+                    <form action="{{ url_for('main.generate_pdf_route') }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="disease" value="{{ row[2] }}">
+                        <input type="hidden" name="confidence" value="{{ row[3] }}">
+                        {% set severity = 'High Risk' if row[3] >= 85 else 'Moderate Risk' if row[3] >= 60 else 'Low
+                        Risk' %}
+                        <input type="hidden" name="severity" value="{{ severity }}">
+                        <input type="hidden" name="original_img" value="{{ row[5] }}">
+                        <input type="hidden" name="gradcam_img" value="{{ row[6] }}">
+                        <button type="submit" class="btn btn-sm btn-outline"><i class="fa-solid fa-download"></i>
+                            PDF</button>
+                    </form>
+                    {% else %}
+                    <span style="color: rgba(255, 255, 255, 0.5); font-style: italic;">Preview Only</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="mt-4">No history records found.</p>
+    {% endif %}
+</div>
+{% endblock %}
