@@ -1,0 +1,11 @@
+flask
+flask-login
+werkzeug
+torch>=2.0.0
+torchvision>=0.15.0
+timm>=0.9.0
+efficientnet-pytorch>=0.7.1
+opencv-python-headless
+fpdf
+Pillow
+numpy

@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# Database files (contains local data/credentials)
+database/*.db
+*.db
+
+# Dynamic runtime uploads and reports
+reports/
+static/reports/
+static/uploads/
+app/static/reports/
+app/static/uploads/
+
+# Root-level generated reports and diagrams
+/confusion_matrix_19class.png
+/confusion_matrix_generated.png
+/dataflow_diagram.png
+/project_dataflow_diagram.png
+/mock_metrics_19class.txt
+/mock_metrics_report.txt
+
+# OS-generated files
+.DS_Store
+Thumbs.db
