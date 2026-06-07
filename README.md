@@ -78,6 +78,34 @@ Run the application
 
 python run.py
 
+## Screenshots
+Home Page
+<img width="1920" height="1011" alt="Screenshot 1" src="https://github.com/user-attachments/assets/6dfaf958-f99e-4a90-954f-55bd11e46818" />
+<img width="1920" height="1014" alt="Screenshot 2" src="https://github.com/user-attachments/assets/0dfbaa5c-daf3-4757-a175-46a0d5594a68" />
+
+Admin Page
+<img width="1920" height="1011" alt="Screenshot 3" src="https://github.com/user-attachments/assets/47ffa729-1d9f-4be9-8aaf-2ac01d0a200b" />
+
+Admin Dashboard
+<img width="1920" height="1011" alt="Screenshot 4" src="https://github.com/user-attachments/assets/8b934d09-f12d-4b42-97ea-2a643b18bbed" />
+<img width="1920" height="1014" alt="Screenshot 5" src="https://github.com/user-attachments/assets/ffec771e-57bd-40a5-ac73-e80576b659c5" />
+<img width="1920" height="1011" alt="Screenshot 6" src="https://github.com/user-attachments/assets/b2cced65-90fc-494c-9a12-8bae607cea23" />
+
+Patient Sign in Page
+<img width="1920" height="1014" alt="Screenshot 7" src="https://github.com/user-attachments/assets/ca838457-b3e9-49e3-9578-e80a7ea6a3b1" />
+
+Patient Profile Entry
+<img width="1920" height="1014" alt="Screenshot 8" src="https://github.com/user-attachments/assets/50ba6239-5b22-4120-bdc4-8df1f19e5f93" />
+
+Disease Image Upload
+<img width="1920" height="1014" alt="Screenshot 9" src="https://github.com/user-attachments/assets/7e43ff5d-c694-4dfd-9bda-a7e74e5bee87" />
+
+Generated Result
+<img width="1920" height="1014" alt="Screenshot 10" src="https://github.com/user-attachments/assets/c8d4d4d6-7574-49a9-b0bb-52fd2af579b8" />
+
+Diagnosis Report
+<img width="1920" height="1080" alt="Screenshot 11" src="https://github.com/user-attachments/assets/5e5ebb0b-b905-4438-9d2f-d35f65ac2377" />
+
 ## Future Enhancements
 - Mobile Application Integration
 - Real-Time Camera Diagnosis
