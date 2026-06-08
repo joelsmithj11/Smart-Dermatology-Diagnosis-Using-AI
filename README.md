@@ -41,6 +41,31 @@ Artificial Intelligence
 
 The model was trained using a curated skin disease image dataset. Due to similarities among certain disease categories, some classes were merged to improve classification performance, resulting in 19 final disease classes.
 
+## Model Performance
+
+The ensemble model (EfficientNet-B4 + DenseNet121) was evaluated on 3,657 test images across 19 skin disease categories.
+
+| Metric | Score |
+|----------|----------|
+| Accuracy | 58.98% |
+| Precision | 54.65% |
+| Recall | 52.74% |
+| F1 Score | 53.17% |
+
+### Best Performing Classes
+- Acne & Rosacea → F1: 0.80
+- Nail Disease → F1: 0.77
+- Melanoma & Nevi → F1: 0.73
+- Fungal Infection → F1: 0.69
+
+### Challenges
+- Class imbalance
+- Similar visual appearance between diseases
+- Limited samples for certain categories
+
+### Note
+A detailed class-wise classification report and evaluation metrics are available in the project report PDF included in this repository.
+
 ## Project Structure
 
 app/
