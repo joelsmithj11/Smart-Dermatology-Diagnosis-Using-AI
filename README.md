@@ -7,6 +7,12 @@ Smart Dermatology Diagnosis Using AI is a web-based clinical decision support sy
 
 The system combines EfficientNet-B4 and DenseNet-121 using ensemble learning to classify skin diseases into 19 categories. It also integrates Grad-CAM visualizations to provide explainable AI predictions and automatically generates diagnostic PDF reports.
 
+## Problem Statement
+
+Early identification of skin diseases is often challenging due to the limited availability of dermatology specialists and the visual similarity between many skin conditions. Manual diagnosis can be time-consuming and may require expert consultation.
+
+This project aims to assist in the preliminary detection of skin diseases using Deep Learning and Computer Vision techniques. The system analyzes uploaded skin images, predicts possible disease categories, provides confidence scores, generates diagnostic reports, and offers explainable AI visualizations to support understanding of model decisions.
+
 ## Features
 
 ✔ 19-Class Skin Disease Classification
